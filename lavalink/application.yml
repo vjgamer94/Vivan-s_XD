@@ -1,27 +1,109 @@
 server:
   port: 2333
   address: 0.0.0.0
+  http2:
+    enabled: false
 
 lavalink:
   plugins:
     - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.5"
       snapshot: false
+    - dependency: "com.github.topi314.lavasearch:lavasearch-plugin:1.0.0"
+      repository: "https://maven.lavalink.dev/releases"
+      snapshot: false
+    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.4.1"
+      repository: "https://maven.lavalink.dev/releases"
+      snapshot: false
+    - dependency: "com.github.topi314.lavalyrics:lavalyrics-plugin:1.0.0"
+      repository: "https://maven.lavalink.dev/releases"
   server:
-    password: "${LAVALINK_PASSWORD:youshallnotpass}"
+    password: "youshallnotpassMEOW"
     sources:
-      youtube: false
+      youtube: true
       bandcamp: true
       soundcloud: true
+      twitch: true
+      vimeo: true
       http: true
-      local: false
+      local: true
+      nico: true
+    filters:
+      volume: true
+      equalizer: true
+      karaoke: true
+      timescale: true
+      tremolo: true
+      vibrato: true
+      distortion: true
+      rotation: true
+      channelMix: true
+      lowPass: true
+    bufferDurationMs: 400
+    frameBufferDurationMs: 5000
+    opusEncodingQuality: 10
+    resamplingQuality: MEDIUM
+    trackStuckThresholdMs: 10000
+    useSeekGhosting: true
+    youtubePlaylistLoadLimit: 6
+    playerUpdateInterval: 5
+    youtubeSearchEnabled: true
+    soundcloudSearchEnabled: true
+    gc-warnings: true
+    plugins:
+      youtube:
+        enabled: true
+        allowSearch: true
+        allowDirectVideoIds: true
+        allowDirectPlaylistIds: true
+        oauth:
+          enabled: true
+          skipInitialization: false
+        pot:
+          token: "CgtLYnJKeDl1N0pJMCjW2cO8BjIKCgJERRIEEgAgKg=="
+          visitorData: "MnRuJyEtJOv8LW4fImJbwY4qXcflEPdSWXwKWnQappnJt4Ee_3bFCJEUmiePXV3jvyjxMuT8pE3j-ZKoLtF-bIjo7-erKATkj38QRYgrGRsEHDC97Qk9a-tcYdXpmMQt2h6A1S325QgSsRfbfjBfBTeDq_oZBA=="
+        clients:
+          - MUSIC
+          - ANDROID_MUSIC
+          - ANDROID_TESTSUITE
+          - WEB
+          - TVHTML5EMBEDDED
+          - M_WEB
+          - WEBEMBEDDED
+          - ANDROID_VR
+          - TV
+      lavasrc:
+        providers:
+          - "ytmsearch:\"%ISRC%\""
+          - "ytmsearch:%QUERY%"
+          - "ytsearch:%QUERY%"
+          - "scsearch:%QUERY%"
+          - "spsearch:%QUERY%"
+          - "sprec:%QUERY%"
 
-plugins:
-  youtube:
+metrics:
+  prometheus:
+    enabled: false
+    endpoint: /metrics
+
+sentry:
+  dsn: ""
+  environment: "dev"
+
+logging:
+  file:
+    path: ./logs/
+  level:
+    root: INFO
+    lavalink: INFO
+    dev.lavalink.youtube.http.YoutubeOauth2Handler: INFO
+  request:
     enabled: true
-    allowSearch: true
-    allowDirectVideoIds: true
-    allowDirectPlaylistIds: true
-    clients:
-      - MUSIC
-      - ANDROID_TESTSUITE
-      - WEB
+    includeClientInfo: true
+    includeHeaders: false
+    includeQueryString: true
+    includePayload: true
+    maxPayloadLength: 10000
+  logback:
+    rollingpolicy:
+      max-file-size: 1GB
+      max-history: 30
